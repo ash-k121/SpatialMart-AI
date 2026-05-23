@@ -1,12 +1,59 @@
 import React from "react";
 
+
+
+function ProductBox({ product, shelf }) {
+    const width = (Number(shelf.width) || 100) / 50;
+    const depth = (Number(shelf.height) || 100) / 50;
+    const height = Number(shelf.shelfHeight) || 2;
+
+    const rows = Number(shelf.rows) || 3;
+    const partitions = Number(shelf.partitions) || 3;
+
+    const cellWidth = width / partitions;
+    const cellHeight = height / rows;
+
+    const x = -width / 2 + cellWidth * (product.col + 0.5);
+    const y = -height / 2 + cellHeight * (product.row + 0.45);
+    const z = depth / 2 - 0.2;
+
+    return (
+      <mesh position={[x, y, z]}>
+        <boxGeometry args={[cellWidth * 0.45, cellHeight * 0.45, 0.25]} />
+        <meshStandardMaterial color={product.color || "red"} />
+      </mesh>
+    );
+  }
 export default function ShelfSidebar({
   selectedShelf,
   setLayoutData,
   layoutData,
 }) {
+  const currentShelf = layoutData.find(
+  (item) => item.id === selectedShelf?.id
+);
 
-  if (!selectedShelf) {
+  const addItemToShelf = () => {
+    const newProduct = {
+      id: crypto.randomUUID(),
+      row: 0,
+      col: 0,
+      color: "red",
+    };
+
+    setLayoutData((prev) =>
+      prev.map((item) =>
+        item.id === selectedShelf.id
+          ? {
+              ...item,
+              items: [...(item.items || []), newProduct],
+            }
+          : item
+      )
+    );
+  };
+
+  if (!currentShelf) {
     return (
       <div className="w-80 bg-gray-900 text-white p-5">
         <h2 className="text-2xl font-bold mb-4">
@@ -45,6 +92,14 @@ export default function ShelfSidebar({
         Shelf Editor
       </h2>
 
+       <button
+        onClick={addItemToShelf}
+        className="w-full bg-cyan-400 text-white py-2 rounded font-semibold"
+      >
+        Add Item
+      </button>
+
+      
       {/* Width */}
       <div className="mb-5">
 
@@ -54,7 +109,7 @@ export default function ShelfSidebar({
 
         <input
           type="number"
-          value={selectedShelf.width}
+          value={currentShelf.width}
           onChange={(e) =>
             updateShelf("width", e.target.value)
           }
@@ -72,7 +127,7 @@ export default function ShelfSidebar({
 
         <input
           type="number"
-          value={selectedShelf.height}
+          value={currentShelf.height}
           onChange={(e) =>
             updateShelf("height", e.target.value)
           }
@@ -90,7 +145,7 @@ export default function ShelfSidebar({
 
         <input
           type="number"
-          value={selectedShelf.shelfHeight || 2}
+          value={currentShelf.shelfHeight || 2}
           onChange={(e) =>
             updateShelf("shelfHeight", e.target.value)
           }
@@ -108,7 +163,7 @@ export default function ShelfSidebar({
 
         <input
           type="number"
-          value={selectedShelf.partitions || 2}
+          value={currentShelf.partitions || 2}
           onChange={(e) =>
             updateShelf("partitions", e.target.value)
           }

@@ -9,6 +9,7 @@ export default function LandingPage() {
   const [selectedFile,setSelectedFile] = useState(null);
   const [layoutData, setLayoutData] = useState([]);
   const [selectedShelf, setSelectedShelf] = useState(null);
+
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
 
@@ -35,7 +36,17 @@ export default function LandingPage() {
         })
         const data = await response.json();
 
-        setLayoutData(data.objects_detected);
+         setLayoutData(
+          data.objects_detected.map((item, index) => ({
+            ...item,
+            id: item.id ?? index,
+            rows: item.rows ?? 3,
+            partitions: item.partitions ?? 3,
+            items: item.items ?? [],
+          }))
+  
+      );
+
 
         console.log(data.objects_detected);
 
@@ -172,11 +183,12 @@ export default function LandingPage() {
       {/* 3D Scene */}
       <div className="flex-1">
 
-        <StoreScene
-          layoutData={layoutData}
-          selectedShelf={selectedShelf}
-          setSelectedShelf={setSelectedShelf}
-        />
+       <StoreScene
+      layoutData={layoutData}
+      selectedShelf={selectedShelf}
+      setSelectedShelf={setSelectedShelf}
+      setLayoutData={setLayoutData}
+    />
 
       </div>
 

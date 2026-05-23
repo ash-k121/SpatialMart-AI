@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 
 
@@ -32,12 +32,15 @@ export default function ShelfSidebar({
   const currentShelf = layoutData.find(
   (item) => item.id === selectedShelf?.id
 );
+  const [row,setRow]= useState(0);
+  const [col,setCol]= useState(0);
+
 
   const addItemToShelf = () => {
     const newProduct = {
       id: crypto.randomUUID(),
-      row: 0,
-      col: 0,
+      row: Number(row),
+      col: Number(col),
       color: "red",
     };
 
@@ -99,7 +102,37 @@ export default function ShelfSidebar({
         Add Item
       </button>
 
-      
+    {/* Row*/ }
+      <div className="mb-5">
+
+        <label className="block mb-2">
+          Row
+        </label>
+
+        <input
+          type="number"
+          value={row}
+          onChange={(e)=>{setRow(e.target.value)}}
+          className="w-full p-2 rounded bg-gray-800"
+        />
+
+      </div>
+
+      {/* Partition*/ }
+      <div className="mb-5">
+        <label className="block mb-2">
+          Partition
+        </label>
+
+        <input
+          type="number"
+          value={col}
+          onChange={(e)=>{setCol(e.target.value)}}
+          className="w-full p-2 rounded bg-gray-800"
+        />
+      </div>
+
+
       {/* Width */}
       <div className="mb-5">
 

@@ -1,5 +1,6 @@
-from fastapi import FastAPI, UploadFile, File
+from fastapi import FastAPI, UploadFile, File,Request
 from fastapi.middleware.cors import CORSMiddleware
+from routes.login_routes import router as login_routes
 import cv2
 import numpy as np
 import os
@@ -100,4 +101,7 @@ async def upload_image(image: UploadFile = File(...)):
         }
 
     
+    
+
+app.include_router(login_routes)
     

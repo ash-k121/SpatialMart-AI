@@ -37,6 +37,10 @@ export default function ShelfSidebar({
 
 
   const addItemToShelf = () => {
+    if(row>currentShelf.rows || col>currentShelf.partitions)
+      alert("Wrong Input");
+
+    else{
     const newProduct = {
       id: crypto.randomUUID(),
       row: Number(row),
@@ -54,6 +58,7 @@ export default function ShelfSidebar({
           : item
       )
     );
+  }
   };
 
   if (!currentShelf) {

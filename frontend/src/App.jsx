@@ -5,11 +5,13 @@ import heroImg from './assets/hero.png'
 import './App.css'
 import LandingPage from './pages/landingPage'
 import StoreScene from './pages/StoreScene'
+import LoginPage from './pages/loginPage'
 function App() {
   
   return (
     <>
-      <LandingPage></LandingPage>
+      {/* <LandingPage></LandingPage> */}
+      <LoginPage></LoginPage>
       
     </>
   )

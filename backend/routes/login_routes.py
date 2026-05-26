@@ -1,6 +1,7 @@
 from fastapi import APIRouter,Request
 from models.user_models import users_collection
 import bcrypt
+from services.jwt_services import create_access_token,verify_token,get_current_user
 router = APIRouter()
 
 
@@ -31,11 +32,18 @@ async def login(request: Request):
             "success": False,
             "msg": "Wrong password"
         }
+    
+    token =create_access_token({
+        "email":existing_user["email"],
+    })
 
     return {
-        "success": True,
+        "success":True,
+        "token":token,
         "msg": "Login successful"
     }
+
+   
 
 @router.post("/signup")
 async def signup(request: Request):
@@ -67,7 +75,41 @@ async def signup(request: Request):
 
     await users_collection.insert_one(user)
 
+
+    token =create_access_token({
+        "email":existing_user["email"],
+    })
+
     return {
-        "success": True,
+        "success":True,
+        "token":token,
         "msg": "User created"
     }
+
+@router.get("/me")
+async def get_me(request:Request):
+    auth_header= request.headers.get("Authorization")
+    if not auth_header:
+
+        return {
+            "success": False,
+            "msg": "No token"
+        }
+
+    token = auth_header.split(" ")[1]
+
+    payload = verify_token(token)
+
+    if payload is None:
+
+        return {
+            "success": False,
+            "msg": "Invalid token"
+        }
+
+    return {
+        "success": True,
+        "user": payload
+    }
+
+    

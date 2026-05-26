@@ -1,14 +1,39 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import LandingPage from "./landingPage";
 import { useNavigate } from "react-router-dom";
 
 export default function LoginPage(){
+    //jwt
+    // const [user,setUser]=useState(null);
+
+    // useEffect(()=>{
+    //     fetchUser();
+    // },[]);
+
     const [role,setRole]= useState("");
     const [name,setName]= useState("");
     const [email,setEmail]= useState("");
     const [password,setPassword]= useState("");
     const navigate=useNavigate();
+    // const fetchUser = async () => {
+        
+    //     const token = localStorage.getItem("token");
+    //     if(!token)return;
+    //     const response = await fetch(
+    //         "http://127.0.0.1:8000/me",
+    //         {
+    //             headers: {
+    //                 Authorization: `Bearer ${token}`
+    //             }
+    //         }
+    //     );
+    //     const data = await response.json();
 
+    //     if(data.success)
+    //     {
+    //         setUser(data.user);
+    //     }
+    // };
     const handleSignUp=async()=>
     {
         const userData={name,email,password,role};
@@ -24,6 +49,7 @@ export default function LoginPage(){
 
                 if(data.success)
                 {
+                    localStorage.setItem("token",data.token)
                     navigate("/landing");
                 }
                 else
@@ -50,6 +76,7 @@ export default function LoginPage(){
 
                 if(data.success)
                 {
+                    localStorage.setItem("token",data.token)
                     navigate("/landing");
                 }
                 else
